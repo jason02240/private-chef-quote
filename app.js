@@ -121,11 +121,35 @@ function renderResults(cards) {
 
 function showInquiry(packageName) {
   document.getElementById('modal-package-name').textContent = packageName;
+  document.getElementById('inquiry-form').reset();
   document.getElementById('inquiry-modal').classList.remove('hidden');
 }
 
 function closeModal() {
   document.getElementById('inquiry-modal').classList.add('hidden');
+}
+
+function submitInquiry(e) {
+  e.preventDefault();
+  const pkg     = document.getElementById('modal-package-name').textContent;
+  const name    = document.getElementById('inquiry-name').value.trim();
+  const contact = document.getElementById('inquiry-contact').value.trim();
+  const date    = document.getElementById('inquiry-date').value.trim();
+  const message = document.getElementById('inquiry-message').value.trim();
+
+  const subject = `私廚晚宴洽詢 — ${pkg}`;
+  const body = [
+    `【洽詢方案】${pkg}`,
+    `【姓名】${name}`,
+    `【聯絡方式】${contact}`,
+    date    ? `【希望日期】${date}` : '',
+    message ? `\n【補充說明】\n${message}` : ''
+  ].filter(Boolean).join('\n');
+
+  window.location.href =
+    `mailto:jason02240@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+  closeModal();
 }
 
 // 初始化
