@@ -116,9 +116,9 @@ async function savePackage(e) {
 
   let error;
   if (editingId) {
-    ({ error } = await supabase.from('packages').update(payload).eq('id', editingId));
+    ({ error } = await db.from('packages').update(payload).eq('id', editingId));
   } else {
-    ({ error } = await supabase.from('packages').insert(payload));
+    ({ error } = await db.from('packages').insert(payload));
   }
 
   btn.disabled = false;
@@ -147,7 +147,7 @@ function buildFeaturesArray() {
 async function deletePackage(id) {
   if (!confirm('確定要刪除這個方案嗎？')) return;
 
-  const { error } = await supabase.from('packages').delete().eq('id', id);
+  const { error } = await db.from('packages').delete().eq('id', id);
   if (error) {
     showToast('刪除失敗：' + error.message, 'error');
     return;

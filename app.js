@@ -13,7 +13,7 @@ function buildQueryVector(peopleGroup, mainDish) {
 }
 
 async function searchPackages(vector) {
-  const { data, error } = await supabase.rpc('match_packages', {
+  const { data, error } = await db.rpc('match_packages', {
     query_embedding: vector,
     match_count: 5
   });
