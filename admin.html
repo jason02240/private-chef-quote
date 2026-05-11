@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>私廚晚宴 · 管理後台</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-body">
+
+  <!-- ── 左側表單 ── -->
+  <aside class="panel">
+    <div class="admin-logo">
+      <span class="logo-icon">✦</span>
+      私廚晚宴
+      <span class="admin-badge">管理後台</span>
+    </div>
+
+    <h2 id="form-title">新增方案</h2>
+
+    <form id="admin-form" autocomplete="off">
+
+      <div class="field-group">
+        <label for="pkg-name">方案名稱</label>
+        <input id="pkg-name" type="text" placeholder="例：牛排四人套餐" required>
+      </div>
+
+      <div class="field-group">
+        <label for="pkg-desc">方案描述</label>
+        <textarea id="pkg-desc" rows="3" placeholder="簡短描述此方案內容與特色…" required></textarea>
+      </div>
+
+      <div class="field-group">
+        <label for="pkg-image">圖片 URL</label>
+        <input id="pkg-image" type="url" placeholder="https://images.unsplash.com/photo-…">
+        <img id="image-preview" class="image-preview hidden" src="" alt="預覽">
+      </div>
+
+      <div class="price-row">
+        <div class="field-group">
+          <label for="pkg-price-min">最低報價 (NT$)</label>
+          <input id="pkg-price-min" type="number" min="0" step="100" placeholder="3500" required>
+        </div>
+        <div class="field-group">
+          <label for="pkg-price-max">最高報價 (NT$)</label>
+          <input id="pkg-price-max" type="number" min="0" step="100" placeholder="5000" required>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>方案特徵（自動計算向量）</label>
+        <div class="checkbox-grid">
+          <label class="checkbox-item"><input type="checkbox" id="f-2-3"    class="feature-check"><span>2-3 人</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="f-4-5"    class="feature-check"><span>4-5 人</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="f-6-8"    class="feature-check"><span>6-8 人</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="f-9-10"   class="feature-check"><span>9-10 人</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="f-steak"   class="feature-check"><span>牛排</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="f-seafood" class="feature-check"><span>海鮮</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="f-wine"    class="feature-check"><span>葡萄酒</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="f-special" class="feature-check"><span>特殊服務</span></label>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>特徵向量預覽</label>
+        <div class="vector-preview"><code id="vector-preview">[0, 0, 0, 0, 0, 0, 0, 0]</code></div>
+        <p class="vector-hint">維度：2-3人 / 4-5人 / 6-8人 / 9-10人 / 牛排 / 海鮮 / 酒水 / 特殊</p>
+      </div>
+
+      <div class="btn-row">
+        <button type="submit" id="save-btn" class="btn-primary">儲存方案</button>
+        <button type="button" id="reset-btn" class="btn-secondary">清除 / 新增</button>
+      </div>
+
+    </form>
+
+    <div class="admin-back">
+      <a href="index.html">← 返回客戶頁面</a>
+    </div>
+  </aside>
+
+  <!-- ── 右側列表 ── -->
+  <main class="panel">
+    <div class="admin-main-header">
+      <h2>所有方案</h2>
+      <button class="btn-secondary" onclick="loadPackages()">重新整理</button>
+    </div>
+    <div id="package-list" class="package-list"></div>
+  </main>
+
+  <!-- ── Toast ── -->
+  <div id="toast" class="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
