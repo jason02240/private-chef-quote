@@ -12,6 +12,19 @@ function buildQueryVector(peopleGroup, mainDish) {
   return v;
 }
 
+function buildVectorFromDescription(text) {
+  const v = [0, 0, 0, 0, 0, 0, 0, 0];
+  if (/[2二兩雙]/.test(text))                               v[0] = 1;
+  if (/[4四]|家庭/.test(text))                               v[1] = 1;
+  if (/[6六]|聚會|朋友/.test(text))                         v[2] = 1;
+  if (/1[0零]|十|宴|公司|商務/.test(text))                  v[3] = 1;
+  if (/牛排|牛肉|steak/i.test(text))                        v[4] = 1;
+  if (/海鮮|龍蝦|干貝|蝦|seafood/i.test(text))              v[5] = 1;
+  if (/酒|wine|葡萄/i.test(text))                           v[6] = 1;
+  if (/甜點|佈置|浪漫|慶生|生日|週年|紀念|特殊/.test(text))  v[7] = 1;
+  return v;
+}
+
 async function searchPackages(vector) {
   const { data, error } = await db.rpc('match_packages', {
     query_embedding: vector,
@@ -162,13 +175,21 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     const people = form.people.value;
     const dish   = form.dish.value;
+    const query  = form.query.value.trim();
+
+    if (!people && !dish && !query) {
+      alert('請至少選擇一項條件或描述您的需求。');
+      return;
+    }
 
     results.classList.add('hidden');
     loading.classList.remove('hidden');
 
     try {
-      const vector = buildQueryVector(people, dish);
-      const raw    = await searchPackages(vector);
+      const dropdownVec = buildQueryVector(people, dish);
+      const descVec     = buildVectorFromDescription(query);
+      const vector      = dropdownVec.map((v, i) => v || descVec[i]);
+      const raw         = await searchPackages(vector);
       const cards  = processResults(raw);
       renderResults(cards);
     } catch (err) {
